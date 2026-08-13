@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -29,12 +30,12 @@ type Location struct {
 	Message    string `json:"-"`
 	Error      error  `json:"-"`
 	Localidade string `json:"localidade"`
-	Erro       bool   `json:"erro"`
+	Erro       string `json:"erro"`
 }
 
 func (s *Service) GetLocationByZipCode(zipCode string) *Location {
 	url := fmt.Sprintf("%s/ws/%s/json", s.url, zipCode)
-
+	fmt.Println(url)
 	httpClient := &http.Client{
 		Timeout: s.timeout,
 	}
@@ -71,7 +72,7 @@ func (s *Service) GetLocationByZipCode(zipCode string) *Location {
 		}
 	}
 
-	if location.Erro {
+	if strings.EqualFold("true", location.Erro) {
 		location.StatusCode = http.StatusNotFound
 		location.Message = "can not find zipcode"
 		location.Error = fmt.Errorf("can not find zipcode")

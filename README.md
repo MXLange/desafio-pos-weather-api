@@ -4,23 +4,11 @@ API em Go que recebe um CEP de 8 digitos, consulta a cidade na ViaCEP e retorna 
 
 ## URL Cloud Run
 
-Substitua pelo endereco gerado apos o deploy no Google Cloud Run:
+Exemplo de chamada:
 
 ```text
-TODO: https://SEU-SERVICO-REGIAO.run.app
+https://temperature-api-9654929303.europe-west1.run.app/temperature?cep=01001000
 ```
-
-## Deploy no Cloud Run
-
-```sh
-gcloud run deploy desafio-pos-weather-api \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars WEATHER_API_KEY=sua-chave-weatherapi,WEATHER_BASE_URL=https://api.weatherapi.com,API_CEP_BASE_URL=https://viacep.com.br
-```
-
-Depois do deploy, copie a URL exibida pelo comando e atualize a secao `URL Cloud Run`.
 
 ## Variaveis de ambiente
 
@@ -31,14 +19,14 @@ WEATHER_BASE_URL=https://api.weatherapi.com
 API_CEP_BASE_URL=https://viacep.com.br
 ```
 
-No Cloud Run, a aplicacao tambem aceita a variavel `PORT` injetada pela plataforma quando `API_PORT` nao estiver definida.
-
 ## Rodar localmente
 
+Faça o export das envs do example.env no terminal e coloque sua api key
+
 ```sh
-cp example.env .env
 go run ./cmd/server
 ```
+
 
 Endpoint:
 
