@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -40,7 +41,7 @@ type Current struct {
 }
 
 func (s *Service) GetCurrentCelciusByCity(city string) *WeatherResponse {
-	url := fmt.Sprintf("%s/v1/current.json?key=%s&q=%s", s.url, s.key, city)
+	url := fmt.Sprintf("%s/v1/current.json?key=%s&q=%s", s.url, url.QueryEscape(s.key), url.QueryEscape(city))
 
 	httpClient := &http.Client{
 		Timeout: s.timeout,

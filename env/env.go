@@ -27,6 +27,9 @@ func New(ctx context.Context) (*Env, error) {
 	}
 
 	v.AutomaticEnv()
+	if !v.IsSet("API_PORT") && v.IsSet("PORT") {
+		v.Set("API_PORT", v.GetString("PORT"))
+	}
 
 	if err := validateRequiredKeys(v); err != nil {
 		return nil, err

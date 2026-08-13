@@ -25,10 +25,11 @@ func NewService(url string) (*Service, error) {
 }
 
 type Location struct {
-	StatusCode int
-	Message    string
-	Error      error
-	Localidade string
+	StatusCode int    `json:"-"`
+	Message    string `json:"-"`
+	Error      error  `json:"-"`
+	Localidade string `json:"localidade"`
+	Erro       bool   `json:"erro"`
 }
 
 func (s *Service) GetLocationByZipCode(zipCode string) *Location {
@@ -68,6 +69,12 @@ func (s *Service) GetLocationByZipCode(zipCode string) *Location {
 			Message:    "failed to decode response body",
 			Error:      err,
 		}
+	}
+
+	if location.Erro {
+		location.StatusCode = http.StatusNotFound
+		location.Message = "can not find zipcode"
+		location.Error = fmt.Errorf("can not find zipcode")
 	}
 
 	return location

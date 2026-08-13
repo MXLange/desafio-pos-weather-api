@@ -18,20 +18,15 @@ func NewHandler(s *Service) *Handler {
 
 func (h *Handler) GetTemperature(w http.ResponseWriter, r *http.Request) {
 	zipCode := r.URL.Query().Get("cep")
-	if zipCode == "" {
-		http.Error(w, "cep is required", http.StatusBadRequest)
-		return
-	}
-
 	isValid := validateCep(zipCode)
 	if !isValid {
-		http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
+		writePlainError(w, "invalid zipcode", http.StatusUnprocessableEntity)
 		return
 	}
 
 	response := h.s.GetCurrentTemperatureByZipCode(zipCode)
 	if response.Error != nil {
-		http.Error(w, response.Message, response.StatusCode)
+		writePlainError(w, response.Message, response.StatusCode)
 		return
 	}
 
@@ -39,7 +34,7 @@ func (h *Handler) GetTemperature(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-var validateCepRegex = `^\d{5}-?\d{3}$`
+var validateCepRegex = `^\d{8}$`
 
 func validateCep(cep string) bool {
 	match, err := regexp.MatchString(validateCepRegex, cep)
@@ -47,4 +42,10 @@ func validateCep(cep string) bool {
 		return false
 	}
 	return match
+}
+
+func writePlainError(w http.ResponseWriter, message string, statusCode int) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(statusCode)
+	w.Write([]byte(message))
 }
