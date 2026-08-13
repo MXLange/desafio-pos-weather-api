@@ -85,7 +85,7 @@ func TestGetTemperatureInvalidZipcode(t *testing.T) {
 func TestGetTemperatureZipcodeNotFound(t *testing.T) {
 	cepServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"erro":true}`))
+		w.Write([]byte(`{"erro":"true"}`))
 	}))
 	defer cepServer.Close()
 

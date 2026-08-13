@@ -34,7 +34,7 @@ func TestGetLocationByZipCodeSuccess(t *testing.T) {
 func TestGetLocationByZipCodeNotFound(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"erro":true}`))
+		w.Write([]byte(`{"erro":"true"}`))
 	}))
 	defer server.Close()
 
